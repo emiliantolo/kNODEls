@@ -10,7 +10,8 @@ host: api.dinnertable.it
 basePath: /v1
 
 schemes:
-- http
+- https
+
 consumes:
 - application/json
 produces:
@@ -113,7 +114,7 @@ definitions:
       AbsoluteDateDeadline:
         type: integer
         format: int64
-        description: The date in which the task must be completed, using the Unix time.
+        description: The date in which the task must be completed, using Unix time.
         example: 1541867607
       RelativeDeadline:
         type: integer
@@ -136,56 +137,84 @@ definitions:
       - RelativeDeadline
       - TaskType
       - TaskFile
+  
+  WorkGroup:
+    title: WorkGroup
+    description: A set of users that are tasked to complete together an exam assigned to them
+    type: array
+    items:
+      type: integer
+      description: the id of a user
     
-  Question:
-    title: Question
+  Exam:
+    title: Exam
+    description: All the informations about an exam
     type: object
     properties:
-      question:
-        type: string
-      published_at:
-        type: string
-      choices:
-        type: array
-        items:
-          $ref: '#/definitions/Choice'
-    required:
-      - question
-      - published_at
-      - choices
-  Choice:
-    title: Choice
-    type: object
-    properties:
-      votes:
+      ExamId:
         type: integer
         format: int32
-      choice:
+        description: The identification number of an exam
+        example: 345
+      Name:
         type: string
+        description: A user friendly name fot the exam
+        example: formal languages and compilers
+      Deadline:
+        type: integer
+        format: int64
+        description: The date in which the exam must be completed, using Unix time.
+        example: 1550676600
+      WorkGroups:
+        type: array
+        description: The groups the exam is assigned for
+        items:
+          $ref: "#/definitions/WorkGroup"
+      Tasks:
+        type: array
+        description: The list of tasks to complete for the exam
+        items:
+          type: integer
+          description: the id of a task
     required:
-      - votes
-      - choice
-  QuestionRequest:
-    title: Question Request
+      - ExamId
+      - Name
+      - Deadline
+      - WorkGroups
+      - Tasks
+          
+  ExamData:
+    title: ExamData
+    description: All the informations about an exam
     type: object
     properties:
-      question:
+      Name:
         type: string
-      choices:
+        description: A user friendly name fot the exam
+        example: formal languages and compilers
+      Deadline:
+        type: integer
+        format: int64
+        description: The date in which the exam must be completed, using Unix time.
+        example: 1550676600
+      WorkGroups:
         type: array
+        description: The groups the exam is assigned for
         items:
-          type: string
+          $ref: "#/definitions/WorkGroup"
+      Tasks:
+        type: array
+        description: The list of tasks to complete for the exam
+        items:
+          type: integer
+          description: the id of a task
     required:
-      - question
-      - choices
-    example:
-      question: Favourite programming language?
-      choices:
-        - Swift
-        - Python
-        - Objective-C
-        - Ruby
-    
+      - Name
+      - Deadline
+      - WorkGroups
+      - Tasks
+
+
 paths:
   
   /users/:
@@ -211,10 +240,10 @@ paths:
       responses:
         200:
           description: ok
-  /users/{id}:
+  /users/{UserId}:
     parameters:
       - in: path
-        name: id
+        name: UserId
         required: true
         type: integer
     get:
@@ -275,59 +304,47 @@ paths:
       responses:
         200:
           description: ok
-          
 
-  /questions:
-    x-summary: Questions Collection
+  /Exams/:
     get:
-      summary: List All Questions
+      summary: Retrieve all the exams
+      tags: [Exams]
       responses:
         200:
-          description: Successful Response
+          description: ok
           schema:
             type: array
             items:
-              $ref: '#/definitions/Question'
-          examples:
-            application/json:
-              - question: Favourite programming language?
-                published_at: '2015-08-05T08:40:51.620Z'
-                choices:
-                  - choice: Swift
-                    votes: 2048
-                  - choice: Python
-                    votes: 1024
-                  - choice: Objective-C
-                    votes: 512
-                  - choice: Ruby
-                    votes: 256
+              $ref: "#/definitions/Exam"
     post:
-      description: >-
-        You may create your own question using this action. It takes a JSON
-        object containing a question and a collection of answers in the
-        form of choices.
-      summary: Create a New Question
+      summary: Create a new exam
+      tags: [Exams]
       parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/QuestionRequest'
+      - in: body
+        name: exam
+        schema: 
+          $ref: "#/definitions/ExamData"
       responses:
-        201:
-          description: ''
+        200:
+          description: ok
+          
+  /Exams/{ExamId}/:
+    parameters:
+      - in: path
+        name: ExamId
+        required: true
+        type: integer
+    get:
+      summary: Retrieve the information about an exam
+      tags: [Exams]
+      responses:
+        200:
+          description: ok
           schema:
-            $ref: '#/definitions/Question'
-          examples:
-            application/json:
-                question: Favourite programming language?
-                published_at: '2015-08-05T08:40:51.620Z'
-                choices:
-                  - choice: Swift
-                    votes: 0
-                  - choice: Python
-                    votes: 0
-                  - choice: Objective-C
-                    votes: 0
-                  - choice: Ruby
-                    votes: 0
+            $ref: "#/definitions/Exam"
+    delete:
+      summary: Delete an exam
+      tags: [Exams]
+      responses:
+        200:
+          description: ok
