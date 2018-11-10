@@ -1,20 +1,125 @@
 swagger: '2.0'
+
 info:
   version: '1.0'
   title: "knodels"
-  description: Polls is a simple API allowing consumers to view polls and vote in them.
-  license:
-    name: MIT
-    url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
-host: polls.apiblueprint.org
-basePath: /
+  description: API for managing a homework system.
+  
+host: api.dinnertable.it
+
+basePath: /v1
+
 schemes:
 - http
 consumes:
 - application/json
 produces:
 - application/json
+
+definitions:
+  User:
+    title: user
+    description: The entity that represent a single physical user.
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: A number that identifies a user.
+        example: 75
+      name:
+        type: string
+        description: The full name of the user
+        example: Mario
+      surname:
+        type: string
+        description: The full surname of the user
+        example: Rossi
+      email:
+        type: string
+        description: The user's email
+        example: mario.rossi@knodel.it
+    required:
+    - id
+    - name
+    - surname
+    - email
+    
+  Question:
+    title: Question
+    type: object
+    properties:
+      question:
+        type: string
+      published_at:
+        type: string
+      choices:
+        type: array
+        items:
+          $ref: '#/definitions/Choice'
+    required:
+      - question
+      - published_at
+      - choices
+  Choice:
+    title: Choice
+    type: object
+    properties:
+      votes:
+        type: integer
+        format: int32
+      choice:
+        type: string
+    required:
+      - votes
+      - choice
+  QuestionRequest:
+    title: Question Request
+    type: object
+    properties:
+      question:
+        type: string
+      choices:
+        type: array
+        items:
+          type: string
+    required:
+      - question
+      - choices
+    example:
+      question: Favourite programming language?
+      choices:
+        - Swift
+        - Python
+        - Objective-C
+        - Ruby
+    
 paths:
+  
+  /users/:
+    get:
+      summary: Retrieve the complete list of the users
+      responses:
+        200:
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        type: integer
+    get:
+      summary: Retrieve the informations of the user identified by the specific id
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/User"
+  
   /questions:
     x-summary: Questions Collection
     get:
@@ -69,52 +174,3 @@ paths:
                     votes: 0
                   - choice: Ruby
                     votes: 0
-definitions:
-  Question:
-    title: Question
-    type: object
-    properties:
-      question:
-        type: string
-      published_at:
-        type: string
-      choices:
-        type: array
-        items:
-          $ref: '#/definitions/Choice'
-    required:
-      - question
-      - published_at
-      - choices
-  Choice:
-    title: Choice
-    type: object
-    properties:
-      votes:
-        type: integer
-        format: int32
-      choice:
-        type: string
-    required:
-      - votes
-      - choice
-  QuestionRequest:
-    title: Question Request
-    type: object
-    properties:
-      question:
-        type: string
-      choices:
-        type: array
-        items:
-          type: string
-    required:
-      - question
-      - choices
-    example:
-      question: Favourite programming language?
-      choices:
-        - Swift
-        - Python
-        - Objective-C
-        - Ruby
