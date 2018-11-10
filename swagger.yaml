@@ -22,28 +22,120 @@ definitions:
     description: The entity that represent a single physical user.
     type: object
     properties:
-      id:
+      UserId:
         type: integer
         format: int32
         description: A number that identifies a user.
         example: 75
-      name:
+      Name:
         type: string
         description: The full name of the user
         example: Mario
-      surname:
+      Surname:
         type: string
         description: The full surname of the user
         example: Rossi
-      email:
+      Email:
         type: string
         description: The user's email
         example: mario.rossi@knodel.it
     required:
-    - id
-    - name
-    - surname
-    - email
+    - UserId
+    - Name
+    - Surname
+    - Email
+    
+  UserData:
+    title: UserData
+    description: The entity used to send data about new users.
+    type: object
+    properties:
+      Name:
+        type: string
+        description: The full name of the user
+        example: Mario
+      Surname:
+        type: string
+        description: The full surname of the user
+        example: Rossi
+      Email:
+        type: string
+        description: The user's email
+        example: mario.rossi@knodel.it
+    required:
+    - Name
+    - Surname
+    - Email
+  
+  Task:
+    title: task
+    description: A single task that a user must complete
+    type: object
+    properties:
+      TaskId:
+        type: integer
+        format: int64
+        description: The number that identifies a single task
+        example: 235
+      AbsoluteDateDeadline:
+        type: integer
+        format: int64
+        description: The date in which the task must be completed, using the Unix time.
+        example: 1541867607
+      RelativeDeadline:
+        type: integer
+        minimum: 0
+        format: int32
+        description: The number of second in which the task must be completed upon assignment
+        example: 108000
+      TaskType:
+        type: string
+        description: The type of the task
+        example: "multichoice"
+        #TODO: define task types
+      TaskFile:
+        type: string
+        #apiary doesn't support binary format
+        #format: binary
+        description: The file attached to the task
+    required:
+      - TaskId
+      - AbsoluteDateDeadline
+      - RelativeDeadline
+      - TaskType
+      - TaskFile
+      
+  TaskData:
+    title: TaskData
+    description: Object storing tasks data
+    type: object
+    properties:
+      AbsoluteDateDeadline:
+        type: integer
+        format: int64
+        description: The date in which the task must be completed, using the Unix time.
+        example: 1541867607
+      RelativeDeadline:
+        type: integer
+        minimum: 0
+        format: int32
+        description: The number of second in which the task must be completed upon assignment
+        example: 108000
+      TaskType:
+        type: string
+        description: The type of the task
+        example: "multichoice"
+        #TODO: define task types
+      TaskFile:
+        type: string
+        #apiary doesn't support binary format
+        #format: binary
+        description: The file attached to the task
+    required:
+      - AbsoluteDateDeadline
+      - RelativeDeadline
+      - TaskType
+      - TaskFile
     
   Question:
     title: Question
@@ -99,6 +191,7 @@ paths:
   /users/:
     get:
       summary: Retrieve the complete list of the users
+      tags: [Users]
       responses:
         200:
           description: ok
@@ -106,6 +199,18 @@ paths:
             type: array
             items:
               $ref: "#/definitions/User"
+    post:
+      summary: Create a new user
+      tags: [Users]
+      parameters:
+      - in: body
+        name: user
+        required: true
+        schema:
+           $ref: "#/definitions/UserData"
+      responses:
+        200:
+          description: ok
   /users/{id}:
     parameters:
       - in: path
@@ -114,12 +219,64 @@ paths:
         type: integer
     get:
       summary: Retrieve the informations of the user identified by the specific id
+      tags: [Users]
       responses:
         200:
           description: ok
           schema:
             $ref: "#/definitions/User"
+    delete:
+      summary: Delete a user from the system
+      tags: [Users]
+      responses:
+        200:
+          description: ok
   
+  /tasks/:
+    get:
+      summary: Retrieve all the tasks in the system
+      tags: [Tasks]
+      responses:
+        200:
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Task"
+    post:
+      summary: Create a new task
+      tags: [Tasks]
+      parameters:
+      - in: body
+        name: task
+        schema:
+          $ref: "#/definitions/TaskData"
+      responses:
+        200:
+          description: ok
+  
+  /tasks/{TaskId}/:
+    parameters:
+      - in: path
+        name: TaskId
+        required: true
+        type: integer
+    get:
+      summary: Retrieve the information about the task with the specific TaskId
+      tags: [Tasks]
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/Task"
+    delete:
+      summary: Remove the task identified with TaskId from the system
+      tags: [Tasks]
+      responses:
+        200:
+          description: ok
+          
+
   /questions:
     x-summary: Questions Collection
     get:
