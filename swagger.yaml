@@ -228,6 +228,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/User"
+        404:
+          description: No user has been found
     post:
       summary: Create a new user
       tags: [Users]
@@ -238,8 +240,10 @@ paths:
         schema:
            $ref: "#/definitions/UserData"
       responses:
-        200:
-          description: ok
+        201:
+          description: The user has been successfully created
+        401:
+          description: The request contains invalid data
   /users/{UserId}:
     parameters:
       - in: path
@@ -254,12 +258,16 @@ paths:
           description: ok
           schema:
             $ref: "#/definitions/User"
+        404:
+          description: The user with the specific UserId hasn't been found
     delete:
       summary: Delete a user from the system
       tags: [Users]
       responses:
-        200:
-          description: ok
+        204:
+          description: User successfully deleted
+        404:
+          description: The user with the specific UserId hasn't been found
   
   /tasks/:
     get:
@@ -272,6 +280,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Task"
+        404:
+          description: No task has been found
     post:
       summary: Create a new task
       tags: [Tasks]
@@ -281,8 +291,10 @@ paths:
         schema:
           $ref: "#/definitions/TaskData"
       responses:
-        200:
-          description: ok
+        201:
+          description: The task has been successfully created
+        400:
+          description: The request contains invalid data
   
   /tasks/{TaskId}/:
     parameters:
@@ -298,12 +310,16 @@ paths:
           description: ok
           schema:
             $ref: "#/definitions/Task"
+        404:
+          description: The task with the specific TaskId hasn't been found
     delete:
       summary: Remove the task identified with TaskId from the system
       tags: [Tasks]
       responses:
-        200:
-          description: ok
+        204:
+          description: The task has been successfully deleted
+        404:
+          description: The task with the specific TaskId hasn't been found
 
   /Exams/:
     get:
@@ -316,6 +332,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Exam"
+        404:
+          description: No exam has been fund
     post:
       summary: Create a new exam
       tags: [Exams]
@@ -325,8 +343,10 @@ paths:
         schema: 
           $ref: "#/definitions/ExamData"
       responses:
-        200:
-          description: ok
+        201:
+          description: The exam has been successfully created
+        400:
+          description: The request contains invalid data
           
   /Exams/{ExamId}/:
     parameters:
@@ -342,9 +362,13 @@ paths:
           description: ok
           schema:
             $ref: "#/definitions/Exam"
+        404:
+          description: The exam with the specific ExamId hasn't been found
     delete:
       summary: Delete an exam
       tags: [Exams]
       responses:
-        200:
-          description: ok
+        204:
+          description: The exam has been successfully deleted
+        404:
+          description: The exam with the specific ExamId hasn't been found
