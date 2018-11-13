@@ -219,8 +219,22 @@ paths:
   
   /users/:
     get:
+    
+      parameters:
+        - in: query
+          name: offset
+          type: integer
+          minimum: 0
+          description: The number of users to skip
+        - in: query
+          name: limit
+          type: integer
+          minimum: 0
+          description: The number of users to display
+ 
       summary: Retrieve the complete list of the users
       tags: [Users]
+      
       responses:
         200:
           description: ok
@@ -228,6 +242,7 @@ paths:
             type: array
             items:
               $ref: "#/definitions/User"
+        
         404:
           description: No user has been found
     post:
@@ -272,6 +287,19 @@ paths:
   /tasks/:
     get:
       summary: Retrieve all the tasks in the system
+      
+      parameters:
+        - in: query
+          name: offset
+          type: integer
+          minimum: 0
+          description: The number of tasks to skip
+        - in: query
+          name: limit
+          type: integer
+          minimum: 0
+          description: The number of tasks to display
+          
       tags: [Tasks]
       responses:
         200:
@@ -324,6 +352,19 @@ paths:
   /Exams/:
     get:
       summary: Retrieve all the exams
+      
+      parameters:
+        - in: query
+          name: offset
+          type: integer
+          minimum: 0
+          description: The number of exams to skip
+        - in: query
+          name: limit
+          type: integer
+          minimum: 0
+          description: The number of exams to display
+          
       tags: [Exams]
       responses:
         200:
