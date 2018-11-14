@@ -6,9 +6,9 @@ info:
   description: API for managing a homework system.
 
 #Basic security through authentication
-#securityDefinitions:
-#  Authentication:
-#    type: basic
+securityDefinitions:
+  Authentication:
+    type: basic
 #security:
 #  - Authentication: []
 
@@ -164,6 +164,13 @@ definitions:
       - WorkGroups
       - Tasks
 
+responses:
+  InvalidDataError:
+    description: The request contains invalid data
+  DataNotFoundError:
+    description: The data requested hadn't been found
+  UnauthorizedError:
+    description: Authentication information is missing or invalid
 
 paths:
   
@@ -194,7 +201,7 @@ paths:
               $ref: "#/definitions/User"
         
         404:
-          description: No user has been found
+          $ref: "#/responses/DataNotFoundError"
     post:
       summary: Create a new user
       tags: [Users]
@@ -207,8 +214,8 @@ paths:
       responses:
         201:
           description: The user has been successfully created
-        401:
-          description: The request contains invalid data
+        400:
+          $ref: "#/responses/InvalidDataError"
   /users/{UserId}:
     parameters:
       - in: path
@@ -224,7 +231,7 @@ paths:
           schema:
             $ref: "#/definitions/User"
         404:
-          description: The user with the specific UserId hasn't been found
+          $ref: "#/responses/DataNotFoundError"
     delete:
       summary: Delete a user from the system
       tags: [Users]
@@ -232,7 +239,7 @@ paths:
         204:
           description: User successfully deleted
         404:
-          description: The user with the specific UserId hasn't been found
+          $ref: "#/responses/DataNotFoundError"
   
   /tasks/:
     get:
@@ -259,7 +266,7 @@ paths:
             items:
               $ref: "#/definitions/Task"
         404:
-          description: No task has been found
+          $ref: "#/responses/DataNotFoundError"
     post:
       summary: Create a new task
       tags: [Tasks]
@@ -272,7 +279,7 @@ paths:
         201:
           description: The task has been successfully created
         400:
-          description: The request contains invalid data
+          $ref: "#/responses/InvalidDataError"
   
   /tasks/{TaskId}/:
     parameters:
@@ -289,7 +296,7 @@ paths:
           schema:
             $ref: "#/definitions/Task"
         404:
-          description: The task with the specific TaskId hasn't been found
+          $ref: "#/responses/DataNotFoundError"
     delete:
       summary: Remove the task identified with TaskId from the system
       tags: [Tasks]
@@ -297,7 +304,7 @@ paths:
         204:
           description: The task has been successfully deleted
         404:
-          description: The task with the specific TaskId hasn't been found
+          $ref: "#/responses/DataNotFoundError"
 
   /Exams/:
     get:
@@ -324,7 +331,7 @@ paths:
             items:
               $ref: "#/definitions/Exam"
         404:
-          description: No exam has been fund
+          $ref: "#/responses/DataNotFoundError"
     post:
       summary: Create a new exam
       tags: [Exams]
@@ -337,7 +344,7 @@ paths:
         201:
           description: The exam has been successfully created
         400:
-          description: The request contains invalid data
+          $ref: "#/responses/InvalidDataError"
           
   /Exams/{ExamId}/:
     parameters:
@@ -354,7 +361,7 @@ paths:
           schema:
             $ref: "#/definitions/Exam"
         404:
-          description: The exam with the specific ExamId hasn't been found
+          $ref: "#/responses/DataNotFoundError"
     delete:
       summary: Delete an exam
       tags: [Exams]
@@ -362,4 +369,4 @@ paths:
         204:
           description: The exam has been successfully deleted
         404:
-          description: The exam with the specific ExamId hasn't been found
+          $ref: "#/responses/DataNotFoundError"
