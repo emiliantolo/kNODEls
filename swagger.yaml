@@ -4,7 +4,14 @@ info:
   version: '1.0'
   title: "knodels"
   description: API for managing a homework system.
-  
+
+#Basic security through authentication
+securityDefinitions:
+  Authentication:
+    type: basic
+security:
+  - Authentication: []
+
 host: api.dinnertable.it
 
 basePath: /v1
