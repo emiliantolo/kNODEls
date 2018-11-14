@@ -12,7 +12,7 @@ securityDefinitions:
 security:
   - Authentication: []
 
-host: api.dinnertable.it
+host: knodels.herokuapp.com
 
 basePath: /v1
 
