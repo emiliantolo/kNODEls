@@ -232,6 +232,20 @@ paths:
             $ref: "#/definitions/User"
         404:
           $ref: "#/responses/DataNotFoundError"
+    post:
+      summary: Modify user informations
+      tags: [Users]
+      parameters:
+      - in: body
+        name: user
+        required: true
+        schema:
+           $ref: "#/definitions/UserData"
+      responses:
+        204:
+          description: User successfully modified
+        404:
+          $ref: "#/responses/DataNotFoundError"
     delete:
       summary: Delete a user from the system
       tags: [Users]
@@ -297,6 +311,20 @@ paths:
             $ref: "#/definitions/Task"
         404:
           $ref: "#/responses/DataNotFoundError"
+    post:
+      summary: Modify task informations
+      tags: [Tasks]
+      parameters:
+      - in: body
+        name: task
+        required: true
+        schema:
+           $ref: "#/definitions/TaskData"
+      responses:
+        204:
+          description: Task successfully modified
+        404:
+          $ref: "#/responses/DataNotFoundError"
     delete:
       summary: Remove the task identified with TaskId from the system
       tags: [Tasks]
@@ -360,6 +388,20 @@ paths:
           description: ok
           schema:
             $ref: "#/definitions/Exam"
+        404:
+          $ref: "#/responses/DataNotFoundError"
+    post:
+      summary: Modify exam informations
+      tags: [Exams]
+      parameters:
+      - in: body
+        name: exam
+        required: true
+        schema:
+           $ref: "#/definitions/ExamData"
+      responses:
+        204:
+          description: Exam successfully modified
         404:
           $ref: "#/responses/DataNotFoundError"
     delete:
