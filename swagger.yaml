@@ -6,13 +6,13 @@ info:
   description: API for managing a homework system.
 
 #Basic security through authentication
-securityDefinitions:
-  Authentication:
-    type: basic
-security:
-  - Authentication: []
+#securityDefinitions:
+#  Authentication:
+#    type: basic
+#security:
+#  - Authentication: []
 
-host: knodels.herokuapp.com
+host: api.dinnertable.it
 
 basePath: /v1
 
@@ -23,39 +23,25 @@ consumes:
 - application/json
 produces:
 - application/json
-
-definitions:
-  User:
-    title: user
-    description: The entity that represent a single physical user.
-    type: object
-    properties:
-      UserId:
-        type: integer
-        format: int32
-        description: A number that identifies a user.
-        example: 75
-      Name:
-        type: string
-        description: The full name of the user
-        example: Mario
-      Surname:
-        type: string
-        description: The full surname of the user
-        example: Rossi
-      Email:
-        type: string
-        description: The user's email
-        example: mario.rossi@knodel.it
-    required:
-    - UserId
-    - Name
-    - Surname
-    - Email
     
+definitions:
+
+  User:
+    allOf:
+    - type: object
+      properties:
+        UserId:
+          type: integer
+          format: int32
+          description: The number that identifies a single user
+          example: 75
+      required:
+      - UserId
+    - $ref: "#/definitions/UserData"
+  
   UserData:
     title: UserData
-    description: The entity used to send data about new users.
+    description: The entity containing all user data.
     type: object
     properties:
       Name:
@@ -76,42 +62,18 @@ definitions:
     - Email
   
   Task:
-    title: task
-    description: A single task that a user must complete
-    type: object
-    properties:
-      TaskId:
-        type: integer
-        format: int64
-        description: The number that identifies a single task
-        example: 235
-      AbsoluteDateDeadline:
-        type: integer
-        format: int64
-        description: The date in which the task must be completed, using the Unix time.
-        example: 1541867607
-      RelativeDeadline:
-        type: integer
-        minimum: 0
-        format: int32
-        description: The number of second in which the task must be completed upon assignment
-        example: 108000
-      TaskType:
-        type: string
-        description: The type of the task
-        example: "multichoice"
-        #TODO: define task types
-      TaskFile:
-        type: string
-        #apiary doesn't support binary format
-        #format: binary
-        description: The file attached to the task
-    required:
+    allOf:
+    - type: object
+      properties:
+        TaskId:
+          type: integer
+          format: int64
+          description: The number that identifies a single task
+          example: 235
+      required:
       - TaskId
-      - AbsoluteDateDeadline
-      - RelativeDeadline
-      - TaskType
-      - TaskFile
+    - $ref: "#/definitions/TaskData"
+    
       
   TaskData:
     title: TaskData
@@ -154,41 +116,17 @@ definitions:
       description: the id of a user
     
   Exam:
-    title: Exam
-    description: All the informations about an exam
-    type: object
-    properties:
-      ExamId:
-        type: integer
-        format: int32
-        description: The identification number of an exam
-        example: 345
-      Name:
-        type: string
-        description: A user friendly name fot the exam
-        example: formal languages and compilers
-      Deadline:
-        type: integer
-        format: int64
-        description: The date in which the exam must be completed, using Unix time.
-        example: 1550676600
-      WorkGroups:
-        type: array
-        description: The groups the exam is assigned for
-        items:
-          $ref: "#/definitions/WorkGroup"
-      Tasks:
-        type: array
-        description: The list of tasks to complete for the exam
-        items:
+    allOf:
+    - type: object
+      properties:
+        ExamId:
           type: integer
-          description: the id of a task
-    required:
+          format: int64
+          description: The number that identifies a single exam
+          example: 245
+      required:
       - ExamId
-      - Name
-      - Deadline
-      - WorkGroups
-      - Tasks
+    - $ref: "#/definitions/ExamData"
           
   ExamData:
     title: ExamData
@@ -199,6 +137,10 @@ definitions:
         type: string
         description: A user friendly name fot the exam
         example: formal languages and compilers
+      Description:
+        type: string
+        description: A short description of the exam
+        example: The exam consists of 13 question, the first 5 are about formal languages, the 7 laters are open questions about compilers and their algorithms. The last one is the bonus question.
       Deadline:
         type: integer
         format: int64
@@ -217,6 +159,7 @@ definitions:
           description: the id of a task
     required:
       - Name
+      - Description
       - Deadline
       - WorkGroups
       - Tasks
