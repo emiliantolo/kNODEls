@@ -7,11 +7,13 @@ info:
 
 #Basic security through authentication
 securityDefinitions:
-  Authentication:
-    type: basic
+  ApiToken:
+    type: apiKey
+    in: header
+    name: API-Key
     
 security:
-  - AuthenticationKey: []
+  - ApiToken: []
 
 host: knodels.herokuapp.com
 
@@ -174,13 +176,52 @@ responses:
     description: Authentication information is missing or invalid
 
 paths:
-  
+
+  /signup/:
+    post:
+      parameters:
+      - in: body
+        name: UserSignUpData
+        description: The sign up information of the user
+        schema:
+          type: object
+          properties:
+            UserEmail:
+              type: string
+              description: User's email
+              example: mario.rossi@knodel.it
+            UserPassword:
+              type: string
+              description: User's password
+              example: P455w0Rd
+          required:
+            - UserEmail
+            - UserPassword
+      summary: Registration of a user
+      security: [] #No security for sign up
+      tags: [SignUp]
+      responses:
+        200:
+          description: ok
+          schema:
+            type: object
+            properties:
+              UserId:
+                type: integer
+                format: int32
+                description: The number that identifies a single user
+                example: 75
+            required:
+            - UserId
+        400:
+          description: The email as already been used
+          
   /login/:
     post:
       parameters:
       - in: body
         name: UserLoginData
-        description: The email used during the sign up
+        description: The login data of the user
         schema:
           type: object
           properties:
@@ -198,12 +239,19 @@ paths:
       responses:
         200:
           description: ok
+          schema:
+            type: object
+            properties:
+              ApiKey:
+                type: string
+                description: The key for authentication
+            required:
+            - ApiKey
         400:
           description: The email or the password are not valid
           
   /users/:
     get:
-    
       parameters:
         - in: query
           name: offset
@@ -215,10 +263,8 @@ paths:
           type: integer
           minimum: 0
           description: The number of users to display
- 
       summary: Retrieve the complete list of the users
       tags: [Users]
-      
       responses:
         200:
           description: ok
@@ -226,7 +272,6 @@ paths:
             type: array
             items:
               $ref: "#/definitions/User"
-        
         404:
           $ref: "#/responses/DataNotFoundError"
     post:
@@ -243,6 +288,7 @@ paths:
           description: The user has been successfully created
         400:
           $ref: "#/responses/InvalidDataError"
+  
   /users/{UserId}:
     parameters:
       - in: path
