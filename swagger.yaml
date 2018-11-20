@@ -274,20 +274,6 @@ paths:
               $ref: "#/definitions/User"
         404:
           $ref: "#/responses/DataNotFoundError"
-    post:
-      summary: Create a new user
-      tags: [Users]
-      parameters:
-      - in: body
-        name: user
-        required: true
-        schema:
-           $ref: "#/definitions/UserData"
-      responses:
-        201:
-          description: The user has been successfully created
-        400:
-          $ref: "#/responses/InvalidDataError"
   
   /users/{UserId}:
     parameters:
