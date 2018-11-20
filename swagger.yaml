@@ -9,8 +9,9 @@ info:
 securityDefinitions:
   Authentication:
     type: basic
-#security:
-#  - Authentication: []
+    
+security:
+  - AuthenticationKey: []
 
 host: knodels.herokuapp.com
 
@@ -174,6 +175,32 @@ responses:
 
 paths:
   
+  /login/:
+    post:
+      parameters:
+      - in: body
+        name: UserLoginData
+        description: The email used during the sign up
+        schema:
+          type: object
+          properties:
+            UserEmail:
+              type: string
+              description: The email used during the sign up
+              example: mario.rossi@knodel.it
+            UserPassword:
+              type: string
+              description: The password chosen during the sign up
+              example: P455w0Rd
+      summary: Authentication of the user
+      security: [] #No security for login
+      tags: [Login]
+      responses:
+        200:
+          description: ok
+        400:
+          description: The email or the password are not valid
+          
   /users/:
     get:
     
