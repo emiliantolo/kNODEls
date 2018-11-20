@@ -167,6 +167,41 @@ definitions:
       - WorkGroups
       - Tasks
 
+  Submission:
+    allOf:
+    - type: object
+      properties:
+        SubmissionId:
+          type: integer
+          format: int64
+          description: The number that identifies a submission
+          example: 245
+      required:
+      - SubmissionId
+    - $ref: "#/definitions/SubmissionData"
+          
+  SubmissionData:
+    title: SubmissionData
+    description: All the informations about a submission
+    type: object
+    properties:
+      Exam:
+        type: object
+        description: The exam related to the submission
+      WorkGroup:
+        type: object
+        description: The group that made the submission
+      Answers:
+        type: array
+        description: The list of the answers
+        items:
+          type: string
+          description: the id of a task
+    required:
+      - Exam
+      - WorkGroup
+      - Answers
+      
 responses:
   InvalidDataError:
     description: The request contains invalid data
@@ -275,7 +310,7 @@ paths:
         404:
           $ref: "#/responses/DataNotFoundError"
   
-  /users/{UserId}:
+  /users/{UserId}/:
     parameters:
       - in: path
         name: UserId
@@ -311,6 +346,25 @@ paths:
       responses:
         204:
           description: User successfully deleted
+        404:
+          $ref: "#/responses/DataNotFoundError"
+
+  /users/{UserId}/submissions/:
+    parameters:
+      - in: path
+        name: UserId
+        required: true
+        type: integer
+    get:
+      summary: Retrieve the submissions of the user identified by the specific id
+      tags: [Submissions]
+      responses:
+        200:
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Submission"
         404:
           $ref: "#/responses/DataNotFoundError"
   
@@ -469,5 +523,62 @@ paths:
       responses:
         204:
           description: The exam has been successfully deleted
+        404:
+          $ref: "#/responses/DataNotFoundError"
+
+  /Submissions/:
+    get:
+      summary: Retrieve all the submissions
+      
+      parameters:
+        - in: query
+          name: offset
+          type: integer
+          minimum: 0
+          description: The number of submissions to skip
+        - in: query
+          name: limit
+          type: integer
+          minimum: 0
+          description: The number of submissions to display
+          
+      tags: [Submissions]
+      responses:
+        200:
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Submission"
+        404:
+          $ref: "#/responses/DataNotFoundError"
+    post:
+      summary: Make a submission
+      tags: [Submissions]
+      parameters:
+      - in: body
+        name: submission
+        schema: 
+          $ref: "#/definitions/SubmissionData"
+      responses:
+        201:
+          description: The submission has been done
+        400:
+          $ref: "#/responses/InvalidDataError"
+          
+  /Submissions/{SubmissionId}/:
+    parameters:
+      - in: path
+        name: SubmissionId
+        required: true
+        type: integer
+    get:
+      summary: Retrieve the information about a submission
+      tags: [Submissions]
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/Submission"
         404:
           $ref: "#/responses/DataNotFoundError"
