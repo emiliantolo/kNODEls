@@ -285,6 +285,17 @@ paths:
         400:
           description: The email or the password are not valid
           
+  /logout/:
+    get:
+      summary: Dismiss authentication of the user
+      security: [] #No security for logout
+      tags: [Logout]
+      responses:
+        204:
+          description: No Content, succesful response without return any content
+        400:
+          description: Bad Request, if the user aren't authenticated
+        
   /users/:
     get:
       parameters:
