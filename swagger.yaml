@@ -526,6 +526,25 @@ paths:
         404:
           $ref: "#/responses/DataNotFoundError"
 
+  /exams/{ExamId}/submissions/:
+    parameters:
+      - in: path
+        name: ExamId
+        required: true
+        type: integer
+    get:
+      summary: Retrieve the submissions related to the exam identified by the specific id
+      tags: [Submissions]
+      responses:
+        200:
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Submission"
+        404:
+          $ref: "#/responses/DataNotFoundError"
+          
   /Submissions/:
     get:
       summary: Retrieve all the submissions
