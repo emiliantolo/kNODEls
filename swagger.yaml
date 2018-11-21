@@ -612,3 +612,32 @@ paths:
             $ref: "#/definitions/Submission"
         404:
           $ref: "#/responses/DataNotFoundError"
+          
+  /Submissions/{SubmissionId}/evaluation/:
+    post:
+      summary: Give a mark and a commet to a submission
+      tags: [evaluation]
+      parameters:
+      - in: path
+        name: SubmissionId
+        required: true
+        type: integer
+      - in: body
+        name: EvaluationData
+        description: Evaluation gived by a TA to a submission
+        schema:
+          type: object
+          properties:
+            Mark:
+              type: number
+              format: float
+              description: Mark assign to a submission
+              example: 7.8
+            Comment:
+              type: string
+              description: Comment left to a submission
+      responses:
+        200:
+          description: Action completed succesfully
+        400:
+          description: Bad request
