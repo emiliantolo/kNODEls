@@ -318,6 +318,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/User"
+        400:
+          description: Bad Request      
         404:
           $ref: "#/responses/DataNotFoundError"
   
@@ -403,6 +405,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Task"
+        400:
+          description: Bad Request
         404:
           $ref: "#/responses/DataNotFoundError"
     post:
@@ -482,6 +486,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Exam"
+        400:
+          description: Bad Request
         404:
           $ref: "#/responses/DataNotFoundError"
     post:
@@ -640,4 +646,4 @@ paths:
         200:
           description: Action completed succesfully
         400:
-          description: Bad request
+          description: Bad Request
