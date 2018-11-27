@@ -462,7 +462,7 @@ paths:
         404:
           $ref: "#/responses/DataNotFoundError"
 
-  /Exams/:
+  /exams/:
     get:
       summary: Retrieve all the exams
       
@@ -504,7 +504,7 @@ paths:
         400:
           $ref: "#/responses/InvalidDataError"
           
-  /Exams/{ExamId}/:
+  /exams/{ExamId}/:
     parameters:
       - in: path
         name: ExamId
@@ -562,7 +562,7 @@ paths:
         404:
           $ref: "#/responses/DataNotFoundError"
           
-  /Submissions/:
+  /submissions/:
     get:
       summary: Retrieve all the submissions
       
@@ -602,7 +602,7 @@ paths:
         400:
           $ref: "#/responses/InvalidDataError"
           
-  /Submissions/{SubmissionId}/:
+  /submissions/{SubmissionId}/:
     parameters:
       - in: path
         name: SubmissionId
@@ -619,7 +619,7 @@ paths:
         404:
           $ref: "#/responses/DataNotFoundError"
           
-  /Submissions/{SubmissionId}/evaluation/:
+  /submissions/{SubmissionId}/evaluation/:
     post:
       summary: Give a mark and a commet to a submission
       tags: [evaluation]
