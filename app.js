@@ -1,6 +1,9 @@
 const express=require('express');
+const bodyparser=require('body-parser');
 const app= express();
 const PORT = process.env.PORT || 3000;
+
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.send('Hello World'));
 
@@ -34,7 +37,7 @@ app.get('/v1/tasks', (req, res) => {
 	var offset=0;
 	var limit=10;
     }
-    
+     
     try{
 	if(limit>=0 && offset>=0){
 	    //ok
@@ -56,10 +59,10 @@ app.get('/v1/tasks', (req, res) => {
 
 app.post('/v1/tasks', (req, res) => {
 
-    var AbsoluteDateDeadline=res.body.AbsoluteDateDeadline;
-    var RelativeDeadline=res.body.RelativeDeadline;
-    var TaskType=res.body.TaskType;
-    var TaskFile=res.body.TaskFile;
+    var AbsoluteDateDeadline=req.body.AbsoluteDateDeadline;
+    var RelativeDeadline=req.body.RelativeDeadline;
+    var TaskType=req.body.TaskType;
+    var TaskFile=req.body.TaskFile;
     
     if(true){	
 	//data accepted
