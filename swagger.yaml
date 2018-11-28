@@ -209,7 +209,8 @@ responses:
     description: The data requested hadn't been found
   UnauthorizedError:
     description: Authentication information is missing or invalid
-
+  ConflictError:
+    description: The submitted data is conflicting
 paths:
 
   /signup/:
@@ -339,7 +340,7 @@ paths:
             $ref: "#/definitions/User"
         404:
           $ref: "#/responses/DataNotFoundError"
-    post:
+    put:
       summary: Modify user informations
       tags: [Users]
       parameters:
@@ -349,10 +350,12 @@ paths:
         schema:
            $ref: "#/definitions/UserData"
       responses:
-        204:
+        200:
           description: User successfully modified
         404:
           $ref: "#/responses/DataNotFoundError"
+        409:
+          $ref: "#/responses/ConflictError"
     delete:
       summary: Delete a user from the system
       tags: [Users]
@@ -487,7 +490,7 @@ paths:
             items:
               $ref: "#/definitions/Exam"
         400:
-          description: Bad Request
+          description: Bad Request 
         404:
           $ref: "#/responses/DataNotFoundError"
     post:
@@ -520,7 +523,7 @@ paths:
             $ref: "#/definitions/Exam"
         404:
           $ref: "#/responses/DataNotFoundError"
-    post:
+    put:
       summary: Modify exam informations
       tags: [Exams]
       parameters:
@@ -530,7 +533,7 @@ paths:
         schema:
            $ref: "#/definitions/ExamData"
       responses:
-        204:
+        200:
           description: Exam successfully modified
         404:
           $ref: "#/responses/DataNotFoundError"
@@ -538,7 +541,7 @@ paths:
       summary: Delete an exam
       tags: [Exams]
       responses:
-        204:
+        200:
           description: The exam has been successfully deleted
         404:
           $ref: "#/responses/DataNotFoundError"
