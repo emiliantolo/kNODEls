@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
-    "test":"jest"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -19,11 +19,13 @@
   "homepage": "https://github.com/emiliantolo/knodels#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
-    "jest": "^23.6.0"
+    "express": "^4.16.4"
   },
-  "jest":{
-   "verbose":true,
-   "collectCoverage":true 
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }
