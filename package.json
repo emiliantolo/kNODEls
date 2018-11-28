@@ -1,7 +1,7 @@
 {
   "name": "knodels",
   "version": "1.0.0",
-  "description": "",
+  "description": "## The state of art of Trentino's back-end meals ### Project Start 30 october 2018",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
@@ -29,3 +29,4 @@
     "jest": "^23.6.0"
   }
 }
+
