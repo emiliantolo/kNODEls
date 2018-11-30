@@ -83,30 +83,34 @@ definitions:
     description: Object storing tasks data
     type: object
     properties:
-      AbsoluteDateDeadline:
-        type: integer
-        format: int64
-        description: The date in which the task must be completed, using Unix time.
-        example: 1541867607
-      RelativeDeadline:
-        type: integer
-        minimum: 0
-        format: int32
-        description: The number of second in which the task must be completed upon assignment
-        example: 108000
       TaskType:
         type: string
         description: The type of the task
-        example: "multichoice"
+        example: multichoice
         #TODO: define task types
+      Question:
+        type: string
+        description: The full question
+        example: What's your name?
+      Options:
+        type: array
+        description: Possible answers
+        items:
+          type: string
+          description: option
+      Answers:
+        type: array
+        description: Right answers
+        items:
+          type: string
+          description: answer
       TaskFile:
         type: string
         #apiary doesn't support binary format
         #format: binary
         description: The file attached to the task
     required:
-      - AbsoluteDateDeadline
-      - RelativeDeadline
+      - Question
       - TaskType
       - TaskFile
   
