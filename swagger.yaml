@@ -494,9 +494,7 @@ paths:
             items:
               $ref: "#/definitions/Exam"
         400:
-          description: Bad Request 
-        404:
-          $ref: "#/responses/DataNotFoundError"
+          description: Bad Request, wrong parameters
     post:
       summary: Create a new exam
       tags: [Exams]
