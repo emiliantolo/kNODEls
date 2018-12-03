@@ -1,6 +1,9 @@
 'use strict';
-module.exports = function(app) {
-	var knodels = require ('../controllers/knodelsController');
+
+module.exports.init = function(app) {
+	var examController=require('./../controllers/examsController.js');
+	
+	//var knodels = require ('../controllers/knodelsController');
 	/*
 	app.route('/v1/signup')
 		.post();
@@ -8,7 +11,7 @@ module.exports = function(app) {
 		.post();
 	app.route('/v1/logout')
 		.get();
-	*/
+	
 	app.route('/v1/users')
 		.get(knodels.getUsers);
 	app.route('/v1/users/:UserId')
@@ -17,7 +20,7 @@ module.exports = function(app) {
 		.delete(knodels.deleteUserByUserId);
 	app.route('/v1/users/:UserId/submissions')
 		.get(knodels.getUserSubmissionByUserd);
-	/*
+	
 	app.route('/v1/submissions')
 		.get()
 		.post();
@@ -32,13 +35,14 @@ module.exports = function(app) {
 		.get()
 		.post()
 		.delete();
+	*/
 	app.route('/v1/exams')
-		.get()
-		.post();
-	app.route('/v1/exams/:ExamId')
-		.get()
-		.post()
-		.delete();
+		.get(examController.getExams)
+		//.post(examController.createExam);
+	/*app.route('/v1/exams/:ExamId')
+		.get(examController.getExamByExamId)
+		.post(examController.modifyExamByExamId)
+		.delete(examController.deleteExamByExamId);
 	app.route('/v1/exams/:ExamId/submissions')
 		.get();
 	*/

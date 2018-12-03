@@ -1,0 +1,16 @@
+[
+	{
+	  "Name": "Formal languages and compilers",
+	  "Description": "The exam consists of 13 question, the first 5 are about formal languages, the 7 laters are open questions about compilers and their algorithms. The last one is the bonus question.",
+	  "Deadline": 1550676600,
+	  "WorkGroups": [45687125, 5367428],
+	  "Tasks": [54522845, 74681262]
+	},
+	{
+	  "Name": "Algorithms and data structures",
+	  "Description": "The exam consists of 4 exercises, description of algorithms that you have to implement",
+	  "Deadline": 1890478851,
+	  "WorkGroups": [45698712, 59781347],
+	  "Tasks": [98798798, 48967123]
+	}
+]
