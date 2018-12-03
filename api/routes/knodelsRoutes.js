@@ -31,11 +31,11 @@ module.exports.init = function(app) {
     app.route('/v1/tasks')
 	.get(taskController.getTasks)
 	.post(taskController.createTask);
+    app.route('/v1/tasks/:TaskId')
+	.get(taskController.getTask)
+	.put(taskController.updateTask)
+	.delete(taskController.deleteTask);
     /*
-    app.route('/v1/tasks/TaskId')
-	.get()
-	.put()
-	.delete();
       app.route('/v1/exams')
       .get()
       .post();
