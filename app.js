@@ -1,7 +1,10 @@
 const express=require('express');
+const dbHandler = require('./dbInit');
+const routes = require('./api/routes/knodelsRoutes');
+
 const app= express();
 const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => res.send('Hello World'));
-
+dbHandler.dbInit();
+routes(app);
 app.listen(PORT);
