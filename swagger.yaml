@@ -446,7 +446,7 @@ paths:
             $ref: "#/definitions/Task"
         404:
           $ref: "#/responses/DataNotFoundError"
-    post:
+    put:
       summary: Modify task informations
       tags: [Tasks]
       parameters:
@@ -456,7 +456,7 @@ paths:
         schema:
            $ref: "#/definitions/TaskData"
       responses:
-        204:
+        200:
           description: Task successfully modified
         404:
           $ref: "#/responses/DataNotFoundError"
@@ -464,7 +464,7 @@ paths:
       summary: Remove the task identified with TaskId from the system
       tags: [Tasks]
       responses:
-        204:
+        200:
           description: The task has been successfully deleted
         404:
           $ref: "#/responses/DataNotFoundError"
