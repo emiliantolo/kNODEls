@@ -444,6 +444,8 @@ paths:
           description: ok
           schema:
             $ref: "#/definitions/Task"
+        400:
+          $ref: "#/responses/InvalidDataError"
         404:
           $ref: "#/responses/DataNotFoundError"
     put:
@@ -458,6 +460,8 @@ paths:
       responses:
         200:
           description: Task successfully modified
+        400:
+          $ref: "#/responses/InvalidDataError"
         404:
           $ref: "#/responses/DataNotFoundError"
     delete:
@@ -466,6 +470,8 @@ paths:
       responses:
         200:
           description: The task has been successfully deleted
+        400:
+          $ref: "#/responses/InvalidDataError"
         404:
           $ref: "#/responses/DataNotFoundError"
 
