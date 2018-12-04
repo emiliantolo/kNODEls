@@ -168,7 +168,6 @@ definitions:
       - Name
       - Description
       - Deadline
-      - WorkGroups
       - Tasks
 
   Submission:
@@ -528,7 +527,7 @@ paths:
         200:
           description: ok
           schema:
-            $ref: "#/definitions/Exam"
+            $ref: "#/definitions/ExamData"
         404:
           $ref: "#/responses/DataNotFoundError"
     put:
