@@ -497,7 +497,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/Exam"
+              $ref: "#/definitions/ExamData"
         400:
           description: Bad Request, wrong parameters
     post:
@@ -528,6 +528,8 @@ paths:
           description: ok
           schema:
             $ref: "#/definitions/ExamData"
+        400:
+          $ref: "#/responses/InvalidDataError"
         404:
           $ref: "#/responses/DataNotFoundError"
     put:
@@ -542,6 +544,10 @@ paths:
       responses:
         200:
           description: Exam successfully modified
+          schema:
+            $ref: "#/definitions/ExamData"
+        400:
+          $ref: "#/responses/InvalidDataError"
         404:
           $ref: "#/responses/DataNotFoundError"
     delete:
@@ -550,6 +556,8 @@ paths:
       responses:
         200:
           description: The exam has been successfully deleted
+        400:
+          $ref: "#/responses/InvalidDataError"
         404:
           $ref: "#/responses/DataNotFoundError"
 
