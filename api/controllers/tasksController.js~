@@ -1,7 +1,0 @@
-exports.getTasks= function (req,res){
-
-};
-
-exports.createTask= function (req,res){
-
-};
