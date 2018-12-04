@@ -38,12 +38,12 @@ module.exports.init = function(app) {
 	*/
 	app.route('/v1/exams')
 		.get(examController.getExams)
-		//.post(examController.createExam);
-	/*app.route('/v1/exams/:ExamId')
+		.post(examController.createExam);
+	app.route('/v1/exams/:ExamId')
 		.get(examController.getExamByExamId)
-		.post(examController.modifyExamByExamId)
+		.put(examController.updateExamByExamId)
 		.delete(examController.deleteExamByExamId);
-	app.route('/v1/exams/:ExamId/submissions')
+	/*app.route('/v1/exams/:ExamId/submissions')
 		.get();
 	*/
 }
