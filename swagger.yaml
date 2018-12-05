@@ -340,6 +340,9 @@ paths:
         400:
           description: Bad Request
           $ref: "#/responses/DataNotFoundError"
+        404:
+          description: Data not found
+          $ref: "#/responses/DataNotFoundError"
     put:
       summary: Modify user informations
       tags: [Users]
