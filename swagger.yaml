@@ -35,9 +35,9 @@ definitions:
       properties:
         UserId:
           type: integer
-          format: int32
+          format: string
           description: The number that identifies a single user
-          example: 75
+          example: 75a3b234c544
       required:
       - UserId
     - $ref: "#/definitions/UserData"
@@ -322,10 +322,6 @@ paths:
             type: array
             items:
               $ref: "#/definitions/User"
-        400:
-          description: Bad Request      
-        404:
-          $ref: "#/responses/DataNotFoundError"
   
   /users/{UserId}/:
     parameters:
@@ -340,8 +336,9 @@ paths:
         200:
           description: ok
           schema:
-            $ref: "#/definitions/User"
-        404:
+            $ref: "#/definitions/UserData"
+        400:
+          description: Bad Request
           $ref: "#/responses/DataNotFoundError"
     put:
       summary: Modify user informations
