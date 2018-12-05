@@ -1,64 +1,56 @@
 let MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://knodels:knodels97@ds123224.mlab.com:23224/knodels';
+const url = 'mongodb+srv://simone:knodels97@knodels-crpnx.mongodb.net/test?retryWrites=true/knodels';
 const dbConnected = MongoClient.connect(url);
-let dbInit = function (){
+let dbInit =  function (){
+	let connection = null;
 	dbConnected.then(
-		client => { 	
-			let db = client.db('knodels'); 
-			db.listCollections().toArray().then(
-				array =>{
-					console.log(array);	
-
-					for( let n of array){
-						let collName = n.name;
-						if(collName.indexOf('system')<0){
-							db.dropCollection(collName)
-								.then( ()=>{console.log('collection dropped');})
-								.catch( err => { throw err; })									
-						}
-					}
-
-					return db;
-				}	
-			)
-			.catch( err => { throw err; })
-			.then( // when deletion is completed do this section
-				(db) =>{
-					 db.collection('Users').insertMany([
-						{
-							Name:'Emiliano',
-							Surname:'Sartori',
-							Email:'emiliano.sartori@gmail.com'
-						},
-
-						{
-							Name:'Renzo',
-							Surname:'Piano',
-							Email: 'renzopiano@gmail.com'
-						},
-						{
-							Name:'Anna',
-							Surname:'Matricardi',
-							Email: 'anna.matricardi@gmail.com'
-						},
-						{
-							Name:'Elena',
-							Surname:'Sabbioni',
-							Email: 'elena.sabbioni@gmail.com'
-						},
-						{
-							Name:'Pietro',
-							Surname:'Arzi',
-							Email: 'pietro.arzi@gmail.com'
-						}
-					]);		
-					console.log('insertion ended');
-					connection.close();
-					console.log('connection closed');
-				}	
-			)	
+		(client) => { 	
+			connection = client; // so we can move the collection around
+			const db = client.db('knodels');
+			return db.dropDatabase();
 		}
 	)
-	.catch(err => {})
+	.then(
+		() =>{
+			console.log('----->database dropped');
+			let db = connection.db('knodels');
+			return db.collection('Users').insertMany([
+				{
+					Name:'Emiliano',
+					Surname:'Sartori',
+					Email:'emiliano.sartori@gmail.com'
+				},
+
+				{
+					Name:'Renzo',
+					Surname:'Piano',
+					Email: 'renzopiano@gmail.com'
+				},
+				{
+					Name:'Anna',
+					Surname:'Matricardi',
+					Email: 'anna.matricardi@gmail.com'
+				},
+				{
+					Name:'Elena',
+					Surname:'Sabbioni',
+					Email: 'elena.sabbioni@gmail.com'
+				},
+				{
+					Name:'Pietro',
+					Surname:'Arzi',
+					Email: 'pietro.arzi@gmail.com'
+				}
+			])			
+		}
+	)
+	.then(	
+		() =>{
+			console.log('----->insertion ended');
+			connection.close();
+			console.log('----->connection closed');
+		}
+	)
+	.catch((err) => {throw err;})
 }
 exports.dbInit = dbInit;
