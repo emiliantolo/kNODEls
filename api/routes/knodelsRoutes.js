@@ -1,21 +1,19 @@
 'use strict';
 module.exports = function(app) {
 	var users= require ('../controllers/usersController');
-	/*
-	app.route('/v1/signup')
-		.post();
-	app.route('/v1/login')
+/*	app.route('/v1/login')
 		.post();
 	app.route('/v1/logout')
 		.get();
 	*/
 	app.route('/v1/users')
-		.get(users.getUsers);
-	/*
+		.get(users.getUsers)
+		.post(users.createUser);
 	app.route('/v1/users/:UserId')
-		.get(users.getUserByUserId)
-		.post(users.setUserByUserId)
+		.get(users.getUserByUserId);
+/*		.put(users.setUserByUserId)
 		.delete(users.deleteUserByUserId);
+	
 	app.route('/v1/users/:UserId/submissions')
 		.get(users.getUserSubmissionByUserd);
 	
