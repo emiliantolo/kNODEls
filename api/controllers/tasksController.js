@@ -2,17 +2,33 @@ var TaskModel = require('./../models/taskModel.js')
 
 module.exports.getTasks = function (req,res){
 
-    if(Object.keys(req.query).length !== 0){
-	var offset=req.query.offset;
-	var limit=req.query.limit;
-    }
-    else{
-	var offset=0;
-	var limit=10;
+    var offset=req.query.offset
+    var limit=req.query.limit
+    
+    let ok=true
+    
+    if(offset===undefined){
+	offset=0
     }
     
-    if(limit>=0 && offset>=0){
+    if(limit===undefined){
+	limit=10
+    }    
 
+    offset=parseInt(offset)
+    limit=parseInt(limit)
+    
+    ok=ok &&
+	typeof(offset)==='number' &&
+	typeof(limit)==='number'
+
+    if(ok){
+	ok=ok && offset>=0 && limit>0
+    }
+    
+    console.log(offset+" "+limit)
+    
+    if(ok){
 	TaskModel
 	    .find({})
 	    .skip(offset)
@@ -21,7 +37,7 @@ module.exports.getTasks = function (req,res){
 	    .then(doc => {
 		console.log(doc)
 
-		if(doc.length==0 && limit>0){
+		if(doc.length==0){
 		    //not found
 		    res.status(404).send({error: "404"})
 		}
@@ -80,12 +96,24 @@ module.exports.createTask= function (req,res){
     let question=req.body.Question;
     let taskType=req.body.TaskType;
     let taskFile=req.body.TaskFile;
+    let options=req.body.Options;
+    let answers=req.body.Answers;
 
-    if(question!==undefined && taskType!==undefined && taskFile!==undefined){	
+
+    
+    let ok=question && taskType && taskFile
+    ok=ok &&
+	typeof(question)==='string' &&
+	typeof(taskType)==='string' &&
+	typeof(taskFile)==='string'
+    
+    ok=ok &&
+	(!options || Array.isArray(options)) &&
+	(!answers || Array.isArray(answers))
+    
+    if(ok){	
 	//data accepted
 	console.log("okokok");
-	let options=req.body.Options;
-	let answers=req.body.Answers;
 
 	let task = new TaskModel({	    
 	    Question: question,
@@ -98,12 +126,15 @@ module.exports.createTask= function (req,res){
 	task.save()
 	    .then(doc => {
 		console.log(doc)
+		res.contentType('application/json')
+		res.status(201)
+		res.send(doc)
+
 	    })
 	    .catch(err => {
 		console.error(err)
 	    })
-		
-		res.status(201).send({error: "201"})
+
     }
     else{
 	//data invalid
@@ -133,30 +164,47 @@ module.exports.updateTask= function (req,res){
 		let taskFile=req.body.TaskFile;
 		let options=req.body.Options;
 		let answers=req.body.Answers;
-		
-		let update={};
 
-		if(question!==undefined){update.Question=question}
-		if(taskType!==undefined){update.TaskType=taskType}
-		if(taskFile!==undefined){update.TaskFile=taskFile}
-		if(options!==undefined){update.Options=options}
-		if(answers!==undefined){update.Answers=answers}
+		let ok=true;
+
+		ok= ok && (question===undefined || typeof(question)==='string')
+		ok= ok && (taskType===undefined || typeof(taskType)==='string')
+		ok= ok && (taskFile===undefined || typeof(taskFile)==='string')
+		ok= ok && (options===undefined || Array.isArray(options))
+		ok= ok && (answers===undefined || Array.isArray(answers))
+
+		if(ok){
+		    
+		    let update={};
+
+		    if(question!==undefined){update.Question=question}
+		    if(taskType!==undefined){update.TaskType=taskType}
+		    if(taskFile!==undefined){update.TaskFile=taskFile}
+		    if(options!==undefined){update.Options=options}
+		    if(answers!==undefined){update.Answers=answers}
+		    
+		    
+		    TaskModel
+			.findOneAndUpdate({_id: taskid},
+					  update,
+					  {new: true})
+			.then(doc => {
+			    console.log(doc)
+			    res.contentType('application/json')
+			    res.status(200)
+			    res.json(doc)
+			})
+			.catch(err => {
+			    console.error(err)
+			})
+			    }
+		else{
+		    console.error(err)
+		    //bad request
+		    res.status(400).send({error: "400"})		    
+		}
 		
-		
-		TaskModel
-		    .findOneAndUpdate({_id: taskid},
-				      update,
-				      {new: true})
-		    .then(doc => {
-			console.log(doc)
-			res.contentType('application/json')
-			res.status(200)
-			res.json(doc)
-		    })
-		    .catch(err => {
-			console.error(err)
-		    })
-			}
+	    }
 
 	})
 	.catch(err => {

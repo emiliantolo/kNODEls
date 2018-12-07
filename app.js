@@ -4,7 +4,7 @@ const app= express();
 
 const mongoose = require('mongoose');
 
-let dev_db_url = 'mongodb://knodels:knodels97@ds123224.mlab.com:23224/knodels';
+let dev_db_url = 'mongodb+srv://emiliano:knodels97@knodels-crpnx.mongodb.net/knodels?retryWrites=true';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
