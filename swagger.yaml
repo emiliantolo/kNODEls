@@ -87,7 +87,6 @@ definitions:
         type: string
         description: The type of the task
         example: multichoice
-        #TODO: define task types
       Question:
         type: string
         description: The full question
@@ -177,8 +176,8 @@ definitions:
         SubmissionId:
           type: integer
           format: int64
-          description: The number that identifies a submission
-          example: 245
+          description: The hexadecimal number that identifies a submission
+          example: 5c0c385783d3885536cca830
       required:
       - SubmissionId
     - $ref: "#/definitions/SubmissionData"
@@ -196,6 +195,7 @@ definitions:
       WorkGroup:
         type: object
         description: The group that made the submission
+        $ref: "#/definitions/WorkGroup"
       Answers:
         type: array
         description: The list of the answers
