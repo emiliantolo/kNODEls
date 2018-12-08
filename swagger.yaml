@@ -189,8 +189,10 @@ definitions:
     type: object
     properties:
       Exam:
-        type: object
-        description: The exam related to the submission
+          type: integer
+          format: int64
+          description: The number that identifies a single exam
+          example: 245
       WorkGroup:
         type: object
         description: The group that made the submission
@@ -199,7 +201,7 @@ definitions:
         description: The list of the answers
         items:
           type: string
-          description: the id of a task
+          description: The written answer for a question
     required:
       - Exam
       - WorkGroup
