@@ -5,6 +5,8 @@ const app= express();
 
 const mongoose = require('mongoose');
 
+mongoose.set('useFindAndModify', false);
+
 let dev_db_url = 'mongodb+srv://luca:knodels97@knodels-crpnx.mongodb.net/knodels';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, { useNewUrlParser: true });
