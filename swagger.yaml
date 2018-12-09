@@ -30,40 +30,60 @@ produces:
 definitions:
 
   User:
-    allOf:
-    - type: object
-      properties:
-        UserId:
-          type: integer
-          format: string
-          description: The number that identifies a single user
-          example: 75a3b234c544
-      required:
+    type: object
+    required:
       - UserId
-    - $ref: "#/definitions/UserData"
+    properties:
+      UserId:
+        type: string
+        description: 'Id of the user'
+        example: 5c0d49861c9d440000d55486
+    $ref: "#/definitions/UserData"
   
   UserData:
-    title: UserData
-    description: The entity containing all user data.
     type: object
     properties:
       Name:
         type: string
-        description: The full name of the user
-        example: Mario
+        description: 'Full name of the user'
+        example: 'Mario'
       Surname:
         type: string
-        description: The full surname of the user
-        example: Rossi
+        description: 'Full surname of the user'
+        example: 'Rossi'
       Email:
         type: string
-        description: The user's email
-        example: mario.rossi@knodel.it
+        description: 'User''s email'
+        example: 'mario.rossi@knodel.it'
     required:
     - Name
     - Surname
     - Email
-  
+  UserDataArray:
+    type: array
+    items:
+      $ref: '#/definitions/UserData'
+    example: [
+               {
+                  "name": "Emiliano",
+                 "surname": "Andreotti",
+                 "email": "emiliano.andreotti@mailservice.com"
+                },
+                {
+                  "name": "Luca",
+                  "surname": "Gagliardi",
+                  "email": "luca.gagliardi@mailservice.com"
+                 },
+                {
+                  "name": "John",
+                  "surname": "Treppendorf",
+                  "email": "john.treppendorf@mailservice.com"
+                }
+             ]
+  CreateUserResponse:
+    type: array
+    items:
+      type: object
   Task:
     allOf:
     - type: object
@@ -302,20 +322,10 @@ paths:
         400:
           description: Bad Request, if the user aren't authenticated
         
-  /users/:
+  /users:
     get:
-      parameters:
-        - in: query
-          name: offset
-          type: integer
-          minimum: 0
-          description: The number of users to skip
-        - in: query
-          name: limit
-          type: integer
-          minimum: 0
-          description: The number of users to display
-      summary: Retrieve the complete list of the users
+      summary: Get all users
+      description: Retrieve the complete list of users
       tags: [Users]
       responses:
         200:
@@ -323,16 +333,37 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/User"
-  
-  /users/{UserId}/:
+              $ref: "#/definitions/UserDataArray"
+    post:
+      tags: [User]
+      description: >-
+        Creates new users in the system (one or many)
+      summary: Create new users
+      parameters: 
+      - in: body
+        name: user
+        required: true
+        schema:
+          type: object
+          $ref: "#/definitions/UserDataArray"
+      responses:
+        201:
+          description: 'Ids of created users'
+          
+        400:
+          description: 'Bad request'
+        404:
+          description: 'Data not found'
+  /users/{UserId}:
     parameters:
       - in: path
         name: UserId
         required: true
-        type: integer
+        type: string
+        description: A 24 characters long string in hex format
     get:
-      summary: Retrieve the informations of the user identified by the specific id
+      summary: Get a user
+      description: Retrieve the informations of the user identified by the specific id
       tags: [Users]
       responses:
         200:
@@ -341,12 +372,12 @@ paths:
             $ref: "#/definitions/UserData"
         400:
           description: Bad Request
-          $ref: "#/responses/DataNotFoundError"
         404:
           description: Data not found
           $ref: "#/responses/DataNotFoundError"
     put:
-      summary: Modify user informations
+      summary: Update a user
+      description: Modify one or more attributes of a specific user
       tags: [Users]
       parameters:
       - in: body
@@ -355,20 +386,25 @@ paths:
         schema:
            $ref: "#/definitions/UserData"
       responses:
-        200:
+        201:
           description: User successfully modified
-        404:
+        400:
+          description: Bad request
           $ref: "#/responses/DataNotFoundError"
-        409:
-          $ref: "#/responses/ConflictError"
+        404:
+          description: Data not found
     delete:
-      summary: Delete a user from the system
+      summary: Delete a user
+      description: Delete a specific user
       tags: [Users]
       responses:
-        204:
+        200:
           description: User successfully deleted
-        404:
+        400:
+          description: Bad request
           $ref: "#/responses/DataNotFoundError"
+        404:
+          description: Data not found
 
   /users/{UserId}/submissions/:
     parameters:
@@ -377,7 +413,8 @@ paths:
         required: true
         type: integer
     get:
-      summary: Retrieve the submissions of the user identified by the specific id
+      summary: Get a user's submission
+      description: Retrieve the submissions of the user identified by the specific id
       tags: [Submissions]
       responses:
         200:
