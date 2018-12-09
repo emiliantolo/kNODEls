@@ -1,109 +1,114 @@
 'use strict'
 
-//var ExamModel = require('./../models/examModel.js')
+var ExamModel = require('./../models/examModel.js')
+
 
 // GET /v1/exams?offset=*&limit=*
 module.exports.getExams = function (req,res){
 	var offset;
 	var limit;
 
-
 	if((Object.keys(req.query).length >= 0) && (Object.keys(req.query).length <= 2)){
 		
 		if(Object.keys(req.query).length !== 0){
 			offset=req.query.offset;
 		    	limit=req.query.limit;
-		    	
-		    	if(offset<0){
-		    		return res.status(400).send({error: "400 Bad Request, invalid parameter"});
-		    	}
-		    	if(limit<0){
-		    		return res.status(400).send({error: "400 Bad Request, invalid parameter"});
-		    	}
-		    	
-		    	if(offset == null){
+			
+			if(offset == undefined){
 		    		offset=0;
 		    	}
-		    	if(limit == null){
+		    	if(limit == undefined){
 		    		limit=10;
 		    	}
+			
+			offset=parseInt(offset);
+		    	limit=parseInt(limit);
+		    	
+		    	
+		    	if(offset<0 || (offset != req.query.offset && req.query.offset != undefined) || limit<0 || (limit != req.query.limit && req.query.limit != undefined)){
+		    		return res.status(400).send({error: "400 Bad Request, invalid parameter"});
+		    	}
+		    	
 		}
 		else{
 			offset=0;
 		    	limit=10;
 		}
-				
-		var examsdata = require('./../objects/exams.json')
-	
-		res.set('Content-Type', 'application/json');
-		res.status(200)
-		
-		var resArray = new Array();	
 		
 		
-		for(var i=offset; i<(offset-(-limit)); i++){
-			resArray.push(examsdata[i]);
+		if(limit === 0){
+			res.set('Content-Type', 'application/json');
+			res.status(200).send([])
+		}else{		
+			ExamModel
+			    .find()
+			    .skip(offset)
+			    .limit(limit)
+			    .exec()
+			    .then(result => {
+				//console.log(result)
+
+				res.set('Content-Type', 'application/json');
+				res.status(200).send(result);
+
+			    })
+			    .catch(err => {
+				//console.error(err)
+				res.status(400).send({error: "400 Bad Request, wrong parameter"})
+			    })
 		}
-		
-		res.send(resArray);
-	    	
 	}
 	else{
 		//wrong parameters number
 		res.status(400).send({error: "400 Bad Request, wrong number of parameters"})
 	}
 
-    };
+}
+
 
 
 // POST /v1/exams
 module.exports.createExam= function (req,res){
 	
-	var name=req.body.Name;
-	var description=req.body.Description;
-	var deadline=req.body.Deadline;
-	var workGroups=req.body.WorkGroups;
-	var tasks=req.body.Tasks;
+	let name=req.body.Name;
+	let description=req.body.Description;
+	let deadline=req.body.Deadline;
+	let workGroups=req.body.WorkGroups;
+	let tasks=req.body.Tasks;
 	
-	if(name!==undefined && description!==undefined && deadline!==undefined && tasks!==undefined){
-		
-		/*let exam = new ExamModel({	    
-		    Name: name,
-		    Description: description,
-		    Deadline: deadline,
-		    WorkGroups: workGroups===undefined ? [] : workGroups,
-		    Tasks: tasks
-		})
-		
-		exam.save()
-	    	.then(doc => {
-			console.log(doc);
-	    	})
-	    	.catch(err => {
-			console.error(err)
-		})*/
+	
+	if(name!==undefined && description!==undefined && deadline!==undefined && tasks!==undefined && name!=="" && description!=="" && deadline!=="" && tasks.length!==0){
 		
 		
-		var examsdata = require('./../objects/exams.json')
+		if(typeof(name)==="string" && typeof(description)==="string" && typeof(deadline)==="number" && (Array.isArray(workGroups) || workGroups===undefined) && Array.isArray(tasks)){
+			let exam = new ExamModel({	    
+			    Name: name,
+			    Description: description,
+			    Deadline: deadline,
+			    WorkGroups: workGroups===undefined ? [] : workGroups,
+			    Tasks: tasks
+			})
 		
-		var newExam = {
-			"ExamId": examsdata.length,
-			"Name": name,
-			"Description": description,
-			"Deadline": deadline,
-			"WorkGroups": workGroups===undefined ? [] : workGroups,
-			"Tasks": tasks
-		};
-		
-		examsdata.push(newExam);
-		
-		res.status(201).send({error: "201"})
+			exam.save()
+		    	.then(result => {
+				//console.log(result);
+				res.set('Content-Type', 'application/json');
+				res.status(201).send({id: result._id})
+		    	})
+		    	.catch(err => {
+				//console.error(err)
+				res.status(400).send({error: "400 Bad Request, wrong parameter"})
+			})
+		}
+		else{
+			res.status(400).send({error: "400 Bad Request, some body parameters have incorrect type"})
+		}
 		
 	}
 	else{
-		res.status(400).send({error: "400"})
+		res.status(400).send({error: "400 Bad Request, some body parameters are incorrect"})
 	}
-};
+}
 
 
 
@@ -112,141 +117,162 @@ module.exports.getExamByExamId= function (req,res){
 
 	let examId = req.params.ExamId;
 	
-	/*ExamModel
+	ExamModel
 	.findOne({_id: examId})
-	.then(doc => {
-	    console.log(doc)
+	.then(result => {
 
-	    if(doc===null){
+	    if(result===null){
 		//not found
-		res.status(404).send({error: "404"})
+		res.status(404).send({error: "404 Not Found"})
 	    }
 	    else{
-		//ok
-		res.contentType('application/json')	    
-		res.status(200)
-		res.json(doc)
+		//found
+		res.set('Content-Type', 'application/json');	    
+		res.status(200).json(result)
 	    }
 	})
 	.catch(err => {
-	    console.error(err)
+	    //console.error(err)
 	    //bad request
-	    res.status(400).send({error: "400"})
-	})*/
+	    res.status(400).send({error: "400 Bad Request, wrong parameter"})
+	})
 	
-	
-	if(examId === undefined || Number(examId) != examId){
-		res.status(400).send({error: "400"})
-	}
-	else{
-		var examsdata = require('./../objects/exams.json')
-	
-		res.set('Content-Type', 'application/json');
-	
-		if(examsdata[examId]==null){
-			res.status(404).send({error: "404"})
-		}
-		else{
-			res.set('Content-Type', 'application/json');
-			res.status(200).send(examsdata[examId])
-		}
-	}
-	
-	
-};
+}
 
 
 // PUT /v1/exams/:ExamId
 module.exports.updateExamByExamId= function (req,res){
 	let examId = req.params.ExamId;
 	
-	if(examId === undefined || Number(examId) != examId){
-		res.status(400).send({error: "400"})
+	if(examId === undefined){
+		res.status(400).send({error: "400 Bad Request, wrong parameter"})
 	}
 	else{
-		var examsdata = require('./../objects/exams.json')
-	
-	
-		if(examsdata[examId]==null){
-			res.status(404).send({error: "404"})
-		}
-		else{
-			
+		
+		ExamModel
+		.findOne({_id: examId})
+		.then(result => {
+		    //console.log(result)
+
+		    if(result===null){
+			//not found
+			res.status(404).send({error: "404 Not Found"})
+		    }
+		    else{
+			//found
+			let controlTypes = true;
+
 			let name=req.body.Name;
-			
 			let description=req.body.Description;
 			let deadline=req.body.Deadline;
 			let workGroups=req.body.WorkGroups;
 			let tasks=req.body.Tasks;
 			
-			if(name !== undefined){
-				examsdata[examId].Name = name;
-			}
-			if(description !== undefined){
-				examsdata[examId].Description = description;
-			}
-			if(deadline !== undefined){
-				examsdata[examId].Deadline = deadline;
-			}
-			if(workGroups !== undefined){
-				examsdata[examId].WorkGroups = workGroups;
-			}
-			if(tasks !== undefined){
-				examsdata[examId].Tasks = tasks;
-			}
+			if(name!=="" && description!=="" && deadline!=="" && tasks.length!==0){
+				let update={};		
+		
+				if(name !== undefined){
+					if(typeof(name)!=="string"){
+						controlTypes=false;
+					}
+					update.Name = name;
+				}
+				if(description !== undefined){
+					if(typeof(description)!=="string"){
+						controlTypes=false;
+					}
+					update.Description = description;
+				}
+				if(deadline !== undefined){
+					if(typeof(deadline)!=="number"){
+						controlTypes=false;
+					}
+					update.Deadline = deadline;
+				}
+				if(workGroups !== undefined){
+					if(!Array.isArray(workGroups)){
+						controlTypes=false;
+					}
+					update.WorkGroups = workGroups;
+				}
+				if(tasks !== undefined){
+					if(!Array.isArray(tasks)){
+						controlTypes=false;
+					}
+					update.Tasks = tasks;
+				}
 			
-			res.set('Content-Type', 'application/json');
-			res.status(200).send(examsdata[examId]);
-			
-		}
+				if(controlTypes){
+				ExamModel
+				    .findOneAndUpdate({_id: examId},
+						      update,
+						      {new: true})
+				    .then(result => {
+					//console.log(result)
+					res.set('Content-Type', 'application/json');
+					res.status(200).json(result)
+				    })
+				    .catch(err => {
+					//console.error(err)
+					res.status(400).send({error: "400 Bad Request, wrong parameter"})
+				    })
+				}
+				else{
+					res.status(400).send({error: "400 Bad Request, some body parameters have incorrect type"});
+				}
+			}
+			else{
+				res.status(400).send({error: "400 Bad Request, some body parameters are incorrect(can not be empty)"});
+			}
+		    }
+
+		})
+		.catch(err => {
+		    //console.error(err)
+		    //bad request
+		    res.status(400).send({error: "400 Bad Request, wrong parameter"})
+		})
 	}
-};
+}
 
 
 // DELETE /v1/exams/:ExamId
 module.exports.deleteExamByExamId= function (req,res){
 	let examId = req.params.ExamId;
 	
-	if(examId === undefined || Number(examId) != examId){
-		res.status(400).send({error: "400"})
+	/*if(examId === undefined){
+		res.status(400).send({error: "400 Bad Request"})
 	}
-	else{
-		var examsdata = require('./../objects/exams.json')
-	
-	
-		if(examsdata[examId]==null){
-			res.status(404).send({error: "404"})
-		}
-		else{
-			
-			var examsdata = require('./../objects/exams.json')
-			
-			examsdata[examId] = null;
-			
-			res.set('Content-Type', 'application/json');
-			res.status(200).send({error: "200"})
-			
-		}
-	}
-};
+	else{*/
+		ExamModel
+		.findOne({_id: examId})
+		.then(result => {
+		    //console.log(result)
 
+		    if(result===null){
+			//not found
+			res.status(404).send({error: "404 Not Found"})
+		    }
+		    else{
+			//found
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			ExamModel
+			    .findOneAndDelete({_id: examId})
+			    .then(result => {
+				//console.log(result)
+				res.set('Content-Type', 'application/json');
+				res.status(200).json(result)
+			    })
+			    .catch(err => {
+				//console.error(err)
+				res.status(400).send({error: "400 Bad Request, wrong parameter"})
+			    })
+				}
+		})
+		.catch(err => {
+		    //console.error(err)
+		    //bad request
+		    res.status(400).send({error: "400 Bad Request, wrong parameter"})
+		})
+	//}
+}

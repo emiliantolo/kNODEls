@@ -14,7 +14,7 @@ let examSchema = new mongoose.Schema({
 	required: true
     },
     Deadline: {
-	type: Date,
+	type: Number,
 	required: true
     },
     WorkGroups: {
@@ -25,6 +25,6 @@ let examSchema = new mongoose.Schema({
 	type: Array,
 	required: false
     }
-})
+});
 
-module.exports = mongoose.model('Exams', examSchema)
+module.exports = mongoose.model('exams', examSchema)
