@@ -8,12 +8,12 @@ module.exports = function(app) {
 	*/
 	app.route('/v1/users')
 		.get(users.getUsers)
-		.post(users.createUser);
+		.post(users.createUsers);
 	app.route('/v1/users/:UserId')
-		.get(users.getUserByUserId);
-/*		.put(users.setUserByUserId)
+		.get(users.getUserByUserId)
+		.put(users.updateUserByUserId)
 		.delete(users.deleteUserByUserId);
-	
+	/*
 	app.route('/v1/users/:UserId/submissions')
 		.get(users.getUserSubmissionByUserd);
 	
