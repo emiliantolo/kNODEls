@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('./../app.js')
-var TaskModel = require('./../api/models/taskModel.js')
+const app = require('./../../app.js')
+var TaskModel = require('./../models/taskModel.js')
 
 /// root
 
@@ -19,7 +19,7 @@ describe('Test the /v1/tasks with GET empty database', () => {
 
     beforeAll(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
+	TaskModel.deleteMany({}).then(() => {
 
 	    return done()
 	})
@@ -86,8 +86,8 @@ describe('Test the /v1/tasks path with POST', () => {
 
     beforeAll(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
-
+	TaskModel.deleteMany({}).then(() => {
+	    
 	    return done()
 	})
     })
@@ -200,8 +200,8 @@ describe('Test the /v1/tasks/:TaskId path with GET', () => {
 
     beforeAll(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
-
+	TaskModel.deleteMany({}).then(() => {
+	    
 	    return done()
 	})
     })
@@ -227,7 +227,7 @@ describe('Test the /v1/tasks/:TaskId path get wrong id format', () => {
 
     beforeAll(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
+	TaskModel.deleteMany({}).then(() => {
 
 	    return done()
 	})
@@ -254,7 +254,7 @@ describe('Test the /v1/tasks/:TaskId path get wrong id format', () => {
 
     beforeAll(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
+	TaskModel.deleteMany({}).then(() => {
 
 	    return done()
 	})
@@ -282,7 +282,7 @@ describe('Test the /v1/tasks/:TaskId path with GET with data insert', () => {
 
     beforeEach(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
+	TaskModel.deleteMany({}).then(() => {
 
 	    return done()
 	})
@@ -529,7 +529,7 @@ describe('Test the /v1/tasks/:TaskId path with PUT with data insert', () => {
 
     beforeEach(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
+	TaskModel.deleteMany({}).then(() => {
 
 	    return done()
 	})
@@ -625,7 +625,7 @@ describe('Test the /v1/tasks/:TaskId path with DELETE with data delete', () => {
 
     beforeEach(function(done) {
 
-	TaskModel.remove({}).exec().then(() => {
+	TaskModel.deleteMany({}).then(() => {
 
 	    return done()
 	})
@@ -652,15 +652,3 @@ describe('Test the /v1/tasks/:TaskId path with DELETE with data delete', () => {
     });
 
 })
-/// GET /v1/tasks empty database
-/*
-  describe('Test the /v1/tasks path no parameters', () => {
-  test('It should response the GET method', () => {
-  return request(app).get("/v1/tasks").then(response => {
-  expect(response.statusCode).toBe(200)
-  expect(response.type).toBe("application/json")
-  expect(response.body).toEqual([])
-  })
-  });
-  })
-*/

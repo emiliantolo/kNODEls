@@ -25,8 +25,6 @@ module.exports.getTasks = function (req,res){
 
     ok=ok && offset>=0 && limit>0
     
-    console.log(offset+" "+limit)
-    
     if(ok){
 	TaskModel
 	    .find({})
@@ -34,7 +32,6 @@ module.exports.getTasks = function (req,res){
 	    .limit(limit)
 	    .exec()
 	    .then(doc => {
-		console.log(doc)
 
 		if(doc.length==0){
 		    //not found
@@ -48,10 +45,10 @@ module.exports.getTasks = function (req,res){
 		    res.json(doc)
 		}
 
-	    })
+	    })/*
 	    .catch(err => {
-		//console.error(err)
-	    })
+		console.error(err)
+	    })*/
 		
 		}
     else{
@@ -63,15 +60,13 @@ module.exports.getTasks = function (req,res){
 
 module.exports.getTask = function (req,res){
     
-    let taskid=req.params.TaskId;
-    console.log(taskid)
-
+    let taskid=req.params.TaskId
+    
     if(mongoose.Types.ObjectId.isValid(taskid)){
 	
 	TaskModel
 	    .findOne({_id: taskid})
 	    .then(doc => {
-		console.log(doc)
 
 		if(doc===null){
 		    //not found
@@ -83,10 +78,10 @@ module.exports.getTask = function (req,res){
 		    res.status(200)
 		    res.json(doc)
 		}
-	    })
+	    })/*
 	    .catch(err => {
-		//console.error(err)
-	    })
+		console.error(err)
+	    })*/
 		}
     else{
 	//bad request
@@ -117,7 +112,6 @@ module.exports.createTask= function (req,res){
     
     if(ok){	
 	//data accepted
-	console.log("okokok");
 
 	let task = new TaskModel({	    
 	    Question: question,
@@ -129,15 +123,14 @@ module.exports.createTask= function (req,res){
 	
 	task.save()
 	    .then(doc => {
-		console.log(doc)
 		res.contentType('application/json')
 		res.status(201)
 		res.send(doc)
 
-	    })
+	    })/*
 	    .catch(err => {
-		//console.error(err)
-	    })
+		console.error(err)
+	    })*/
 
 		}
     else{
@@ -149,14 +142,12 @@ module.exports.createTask= function (req,res){
 module.exports.updateTask= function (req,res){
 
     let taskid=req.params.TaskId;
-    console.log(taskid)
 
     if(mongoose.Types.ObjectId.isValid(taskid)){
 
 	TaskModel
 	    .findOne({_id: taskid})
 	    .then(doc => {
-		console.log(doc)
 
 		if(doc===null){
 		    //not found
@@ -195,14 +186,13 @@ module.exports.updateTask= function (req,res){
 					      update,
 					      {new: true})
 			    .then(doc => {
-				console.log(doc)
 				res.contentType('application/json')
 				res.status(200)
 				res.json(doc)
-			    })
+			    })/*
 			    .catch(err => {
-				//console.error(err)
-			    })
+				console.error(err)
+			    })*/
 				}
 		    else{
 			//bad request
@@ -211,10 +201,10 @@ module.exports.updateTask= function (req,res){
 		    
 		}
 
-	    })
+	    })/*
 	    .catch(err => {
-		//console.error(err)
-	    })
+		console.error(err)
+	    })*/
 		}
     else{
 	//bad request
@@ -225,14 +215,12 @@ module.exports.updateTask= function (req,res){
 
 module.exports.deleteTask= function (req,res){
 
-    let taskid=req.params.TaskId;
-    console.log(taskid)
+    let taskid=req.params.TaskId
     if(mongoose.Types.ObjectId.isValid(taskid)){
 	
 	TaskModel
 	    .findOne({_id: taskid})
 	    .then(doc => {
-		console.log(doc)
 
 		if(doc===null){
 		    //not found
@@ -244,19 +232,18 @@ module.exports.deleteTask= function (req,res){
 		    TaskModel
 			.findOneAndRemove({_id: taskid})
 			.then(doc => {
-			    console.log(doc)
 			    res.contentType('application/json')
 			    res.status(200)
 			    res.json(doc)
-			})
+			})/*
 			.catch(err => {
-			    //console.error(err)
-			})
+			    console.error(err)
+			})*/
 			    }
-	    })
+	    })/*
 	    .catch(err => {
-		//console.error(err)
-	    })
+		console.error(err)
+	    })*/
 		}
     else{
 	//bad request
