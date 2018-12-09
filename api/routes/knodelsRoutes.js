@@ -1,23 +1,22 @@
 'use strict';
 module.exports = function(app) {
-	var knodels = require ('../controllers/knodelsController');
-	/*
-	app.route('/v1/signup')
-		.post();
-	app.route('/v1/login')
+	var users= require ('../controllers/usersController');
+/*	app.route('/v1/login')
 		.post();
 	app.route('/v1/logout')
 		.get();
 	*/
 	app.route('/v1/users')
-		.get(knodels.getUsers);
+		.get(users.getUsers)
+		.post(users.createUsers);
 	app.route('/v1/users/:UserId')
-		.get(knodels.getUserByUserId)
-		.post(knodels.setUserByUserId)
-		.delete(knodels.deleteUserByUserId);
-	app.route('/v1/users/:UserId/submissions')
-		.get(knodels.getUserSubmissionByUserd);
+		.get(users.getUserByUserId)
+		.put(users.updateUserByUserId)
+		.delete(users.deleteUserByUserId);
 	/*
+	app.route('/v1/users/:UserId/submissions')
+		.get(users.getUserSubmissionByUserd);
+	
 	app.route('/v1/submissions')
 		.get()
 		.post();
