@@ -1,32 +1,7 @@
 'use strict';
 
 module.exports = function(app) {
-/*
-    var knodels = require ('../controllers/knodelsController');
-      app.route('/v1/signup')
-      .post();
-      app.route('/v1/login')
-      .post();
-      app.route('/v1/logout')
-      .get();
-    app.route('/v1/users')
-	.get(knodels.getUsers);
-    app.route('/v1/users/:UserId')
-	.get(knodels.getUserByUserId)
-	.post(knodels.setUserByUserId)
-	.delete(knodels.deleteUserByUserId);
-    app.route('/v1/users/:UserId/submissions')
-	.get(knodels.getUserSubmissionByUserd);
 
-      app.route('/v1/submissions')
-      .get()
-      .post();
-      app.route('/v1/submissions/:SubmissionId')
-      .get();
-      app.route('/v1/submissions/:SubmissionId/evaluation')
-      .get();
-    */
-    
     var taskController=require('./../controllers/tasksController.js');
 
     app.route('/v1/tasks')
@@ -36,24 +11,18 @@ module.exports = function(app) {
 	.get(taskController.getTask)
 	.put(taskController.updateTask)
 	.delete(taskController.deleteTask);
-    /*
-      app.route('/v1/exams')
-      .get()
-      .post();
-      app.route('/v1/exams/:ExamId')
-      .get()
-      .post()
-      .delete();
-      app.route('/v1/exams/:ExamId/submissions')
-      .get();
-    */
     
-	var users= require ('../controllers/usersController');
-/*	app.route('/v1/login')
+	var users= require ('../controllers/usersController');	
+	
+	/*
+	app.route('/v1/signup')
+		.post();
+	app.route('/v1/login')
 		.post();
 	app.route('/v1/logout')
 		.get();
 	*/
+	
 	app.route('/v1/users')
 		.get(users.getUsers)
 		.post(users.createUsers);
@@ -72,21 +41,18 @@ module.exports = function(app) {
 		.get();
 	app.route('/v1/submissions/:SubmissionId/evaluation')
 		.get();
-	app.route('/v1/tasks')
-		.get()
-		.post();
-	app.route('/v1/tasks/TaskId')
-		.get()
-		.post()
-		.delete();
+	*/
+	
+	var examController=require('./../controllers/examsController.js');
+	
 	app.route('/v1/exams')
-		.get()
-		.post();
+		.get(examController.getExams)
+		.post(examController.createExam);
 	app.route('/v1/exams/:ExamId')
-		.get()
-		.post()
-		.delete();
-	app.route('/v1/exams/:ExamId/submissions')
+		.get(examController.getExamByExamId)
+		.put(examController.updateExamByExamId)
+		.delete(examController.deleteExamByExamId);
+	/*app.route('/v1/exams/:ExamId/submissions')
 		.get();
 	*/
     
