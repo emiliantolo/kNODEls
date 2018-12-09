@@ -656,7 +656,7 @@ paths:
           $ref: "#/responses/DataNotFoundError"
           
     delete:
-      summary: Delete atex submission
+      summary: Delete a submission
       tags: [Submissions]
       responses:
         200:
