@@ -1,5 +1,9 @@
 const express=require('express');
 const bodyparser=require('body-parser');
+
+const dbHandler = require('./dbInit');
+const routes = require('./api/routes/knodelsRoutes');
+
 const app= express();
 
 const mongoose = require('mongoose');
@@ -11,12 +15,10 @@ mongoose.Promise = global.Promise;
 let dbc = mongoose.connection;
 dbc.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.use(bodyparser.json());
-
 app.get('/', (req, res) => res.send('Hello World'));
 
-var routes=require('./api/routes/knodelsRoutes.js');
-
-routes.init(app);
+app.use(bodyparser.json());
+app.use(express.json());
+routes(app);
 
 module.exports = app;

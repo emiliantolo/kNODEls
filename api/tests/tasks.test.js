@@ -92,7 +92,7 @@ describe('Test the /v1/tasks path with POST', () => {
 	})
     })
     
-    test('It should response the POST method', () => {
+    test('Required parameters', () => {
 	return request(app).post("/v1/tasks")
 	    .send({
 		"Question": "proident ut ad",
@@ -107,7 +107,7 @@ describe('Test the /v1/tasks path with POST', () => {
 	    })
     });
     
-    test('It should response the POST method', () => {
+    test('Wrong parameter type', () => {
 	return request(app).post("/v1/tasks")
 	    .send({
 		"Question": "proident ut ad",
@@ -120,7 +120,7 @@ describe('Test the /v1/tasks path with POST', () => {
 	    })
     });
     
-    test('It should response the POST method', () => {
+    test('Missing require parameter', () => {
 	return request(app).post("/v1/tasks")
 	    .send({
 		"Question": "",
@@ -132,7 +132,7 @@ describe('Test the /v1/tasks path with POST', () => {
 	    })
     });
 
-    test('It should response the POST method', () => {
+    test('All parameters', () => {
 	return request(app).post("/v1/tasks")
 	    .send({
 		"Question": "proident ut ad",
@@ -176,7 +176,7 @@ describe('Test the /v1/tasks path with POST', () => {
 	    })
     });
     
-    test('It should response the POST method', () => {
+    test('Required and Options', () => {
 	return request(app).post("/v1/tasks")
 	    .send({
 		"Question": "proident ut ad",
