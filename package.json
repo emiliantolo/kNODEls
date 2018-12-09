@@ -4,8 +4,8 @@
   "description": "## The state of art of Trentino's back-end meals ### Project Start 30 october 2018",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "jest"
+    "start": "node server.js",
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",
@@ -19,14 +19,18 @@
   "homepage": "https://github.com/emiliantolo/knodels#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "mongoose": "^5.3.14"
   },
   "jest": {
     "verbose": true,
-    "collectCoverage": true
+      "collectCoverage": true
   },
   "devDependencies": {
-    "jest": "^23.6.0"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.6.0",
+    "superagent": "^4.0.0",
+    "supertest": "^3.3.0"
   }
 }
-
