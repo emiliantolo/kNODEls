@@ -638,6 +638,33 @@ paths:
             $ref: "#/definitions/Submission"
         404:
           $ref: "#/responses/DataNotFoundError"
+    put:
+      summary: Modifies the information about an existing submission
+      tags: [Submissions]
+      parameters:
+      - in: body
+        name: submission
+        required: true
+        schema:
+           $ref: "#/definitions/SubmissionData"
+      responses:
+        204:
+          description: ok, submission successfully modified
+        400:
+          $ref: "#/responses/InvalidDataError"
+        404:
+          $ref: "#/responses/DataNotFoundError"
+          
+    delete:
+      summary: Delete aa submission
+      tags: [Submissions]
+      responses:
+        200:
+          description: The submission has been successfully deleted
+        400:
+          $ref: "#/responses/InvalidDataError"
+        404:
+          $ref: "#/responses/DataNotFoundError"
           
   /submissions/{SubmissionId}/evaluation/:
     post:
