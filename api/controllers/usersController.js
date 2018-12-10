@@ -149,13 +149,14 @@ exports.getUsers= function (req,res){
 	.then(
 		userData => {
 			userData.forEach( (item,index)  => {
-				userData[index]={
-				"userId": item._id,
-				"name": item.Name,
-				"nurname": item.Surname,
-				"email": item.Email
-				}	
-			})
+					userData[index]={
+						userId: item._id,
+						name: item.name,
+						surname: item.surname,
+						email: item.email
+					}	
+				}
+			)
 			res.status(200).json(userData); // send data
 		}
 	)
