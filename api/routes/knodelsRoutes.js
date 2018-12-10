@@ -30,18 +30,13 @@ module.exports = function(app) {
 		.get(users.getUserByUserId)
 		.put(users.updateUserByUserId)
 		.delete(users.deleteUserByUserId);
-	/*
-	app.route('/v1/users/:UserId/submissions')
-		.get(users.getUserSubmissionByUserd);
 	
-	app.route('/v1/submissions')
-		.get()
-		.post();
-	app.route('/v1/submissions/:SubmissionId')
-		.get();
-	app.route('/v1/submissions/:SubmissionId/evaluation')
-		.get();
-	*/
+	var submissions = require ('../controllers/submissionsController');
+	app.route('/v1/submissions').get(submissions.getSubmissions);
+	app.route('/v1/submissions').post(submissions.setSubmissions);
+	app.route('/v1/submissions/:SubmissionId').get(submissions.getSubmissionById);
+	app.route('/v1/submissions/:SubmissionId').put(submissions.modifySubmission);
+	app.route('/v1/submissions/:SubmissionId').delete(submissions.deleteSubmission);
 	
 	var examController=require('./../controllers/examsController.js');
 	
