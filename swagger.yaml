@@ -532,13 +532,15 @@ paths:
       tags: [Exams]
       responses:
         200:
-          description: ok
+          description: Succesful request
           schema:
             type: array
             items:
               $ref: "#/definitions/ExamData"
         400:
-          description: Bad Request, wrong parameters
+          description: Bad Request, wrong parameters |
+                       Bad Request, invalid parameter |
+                       Bad Request, wrong number of parameters
     post:
       summary: Create a new exam
       tags: [Exams]
@@ -564,7 +566,7 @@ paths:
       tags: [Exams]
       responses:
         200:
-          description: ok
+          description: Succesful request
           schema:
             $ref: "#/definitions/ExamData"
         400:
@@ -582,7 +584,7 @@ paths:
            $ref: "#/definitions/ExamData"
       responses:
         200:
-          description: Exam successfully modified
+          description: Exam successfully update
           schema:
             $ref: "#/definitions/ExamData"
         400:
