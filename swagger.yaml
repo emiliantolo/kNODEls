@@ -238,45 +238,6 @@ responses:
     description: The submitted data is conflicting
 paths:
 
-  /signup/:
-    post:
-      parameters:
-      - in: body
-        name: UserSignUpData
-        description: The sign up information of the user
-        schema:
-          type: object
-          properties:
-            UserEmail:
-              type: string
-              description: User's email
-              example: mario.rossi@knodel.it
-            UserPassword:
-              type: string
-              description: User's password
-              example: P455w0Rd
-          required:
-            - UserEmail
-            - UserPassword
-      summary: Registration of a user
-      security: [] #No security for sign up
-      tags: [SignUp]
-      responses:
-        200:
-          description: ok
-          schema:
-            type: object
-            properties:
-              UserId:
-                type: integer
-                format: int32
-                description: The number that identifies a single user
-                example: 75
-            required:
-            - UserId
-        400:
-          description: The email as already been used
-          
   /login/:
     post:
       parameters:
